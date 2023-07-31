@@ -18,3 +18,7 @@ npm run build
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 "# CafePicker" 
+
+
+<h2>Project online:</h2>
+<p> https://cafe-pickerr.vercel.app</p>
