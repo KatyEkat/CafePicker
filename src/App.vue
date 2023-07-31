@@ -7,15 +7,23 @@
     <div v-if="selectedCafe">
       <h3>{{ selectedCafe.name }}</h3>
       <p>Кухня: {{ selectedCafe.cuisine }}</p>
-      <p>Средний чек: {{ selectedCafe.average_bill }} руб.</p>
-      <button @click="shareCafe" class="btn btn-success">Поделиться</button>
+      <p>Средний чек: {{ selectedCafe.price }} руб.</p>
+      <button @click="shareCafe(selectedCafe)" class="btn btn-success">Поделиться</button>
+    </div>
+    <div v-else>
+      <div v-for="cafe in cafes" :key="cafe.id">
+        <h3>{{ cafe.name }}</h3>
+        <p>Кухня: {{ cafe.cuisine }}</p>
+        <p>Средний чек: {{ cafe.price }} руб.</p>
+        <button @click="shareCafe(cafe)" class="btn btn-success">Поделиться</button>
+        <hr>
+      </div>
     </div>
   </div>
 </template>
-
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import axios from "axios";
+import { getCafes } from '../api/api';
 
 export default defineComponent({
   name: "App",
@@ -23,33 +31,21 @@ export default defineComponent({
     let cafes = ref([]);
     let selectedCafe = ref(null);
 
-    const getCafes = async () => {
-      try {
-        const { data } = await axios.get(
-          "https://bandaumnikov.ru/api/test/site/get-index"
-        );
-        if (!data) {
-          return console.error("Пустой ответ от сервера");
-        }
-        cafes.value = data.data;
-      } catch (error) {
-        console.error(error);
-      }
+    const getAllCafes = async () => {
+      const response = await getCafes();
+      cafes.value = response.data.data;
     };
 
-    const getRandomCafe = async () => {
-      if (cafes.value.length === 0) {
-        await getCafes();
-      }
+    const getRandomCafe = () => {
       const randomIndex = Math.floor(Math.random() * cafes.value.length);
       selectedCafe.value = cafes.value[randomIndex];
     };
 
-    const shareCafe = () => {
-      alert("Поделись кафе с друзьями!");
+    const shareCafe = (cafe) => {
+      alert("Поделись кафе '" + cafe.name + "' с друзьями!");
     };
 
-    onMounted(() => getCafes());
+    onMounted(getAllCafes);
 
     return {
       cafes,
@@ -60,7 +56,6 @@ export default defineComponent({
   },
 });
 </script>
-
 <style>
 .container {
   max-width: 600px;
