@@ -21,4 +21,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 <h2>Project online:</h2>
-<p> https://cafe-pickerr.vercel.app</p>
+<p>https://cafe-picker.vercel.app</p>
